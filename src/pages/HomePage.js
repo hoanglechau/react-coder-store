@@ -29,6 +29,52 @@ function HomePage() {
   });
   const { watch, reset } = methods;
   const filters = watch();
+
+  function applyFilter(productsPara, filtersPara) {
+    const { sortBy } = filtersPara;
+    let filteredProducts = productsPara;
+
+    // SORT BY
+    if (sortBy === 'featured') {
+      filteredProducts = orderBy(products, ['sold'], ['desc']);
+    }
+    if (sortBy === 'newest') {
+      filteredProducts = orderBy(products, ['createdAt'], ['desc']);
+    }
+    if (sortBy === 'priceDesc') {
+      filteredProducts = orderBy(products, ['price'], ['desc']);
+    }
+    if (sortBy === 'priceAsc') {
+      filteredProducts = orderBy(products, ['price'], ['asc']);
+    }
+
+    // FILTER PRODUCTS
+    if (filters.gender.length > 0) {
+      filteredProducts = products.filter((product) => filters.gender.includes(product.gender));
+    }
+    if (filters.category !== 'All') {
+      filteredProducts = products.filter(
+        (product) => product.category === filters.category,
+      );
+    }
+    if (filters.priceRange) {
+      filteredProducts = products.filter((product) => {
+        if (filters.priceRange === 'below') {
+          return product.price < 25;
+        }
+        if (filters.priceRange === 'between') {
+          return product.price >= 25 && product.price <= 75;
+        }
+        return product.price > 75;
+      });
+    }
+    if (filters.searchQuery) {
+      // eslint-disable-next-line max-len
+      filteredProducts = products.filter((product) => product.name.toLowerCase().includes(filters.searchQuery.toLowerCase()));
+    }
+    return filteredProducts;
+  }
+
   const filterProducts = applyFilter(products, filters);
 
   useEffect(() => {
@@ -38,9 +84,9 @@ function HomePage() {
         const res = await apiService.get('/products');
         setProducts(res.data);
         setError('');
-      } catch (error) {
-        console.log(error);
-        setError(error.message);
+      } catch (err) {
+        console.log(err);
+        setError(err.message);
       }
       setLoading(false);
     };
@@ -71,6 +117,7 @@ function HomePage() {
           {loading ? (
             <LoadingScreen />
           ) : (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
             <>
               {error ? (
                 <Alert severity="error">{error}</Alert>
@@ -83,50 +130,6 @@ function HomePage() {
       </Stack>
     </Container>
   );
-}
-
-function applyFilter(products, filters) {
-  const { sortBy } = filters;
-  let filteredProducts = products;
-
-  // SORT BY
-  if (sortBy === 'featured') {
-    filteredProducts = orderBy(products, ['sold'], ['desc']);
-  }
-  if (sortBy === 'newest') {
-    filteredProducts = orderBy(products, ['createdAt'], ['desc']);
-  }
-  if (sortBy === 'priceDesc') {
-    filteredProducts = orderBy(products, ['price'], ['desc']);
-  }
-  if (sortBy === 'priceAsc') {
-    filteredProducts = orderBy(products, ['price'], ['asc']);
-  }
-
-  // FILTER PRODUCTS
-  if (filters.gender.length > 0) {
-    filteredProducts = products.filter((product) => filters.gender.includes(product.gender));
-  }
-  if (filters.category !== 'All') {
-    filteredProducts = products.filter(
-      (product) => product.category === filters.category,
-    );
-  }
-  if (filters.priceRange) {
-    filteredProducts = products.filter((product) => {
-      if (filters.priceRange === 'below') {
-        return product.price < 25;
-      }
-      if (filters.priceRange === 'between') {
-        return product.price >= 25 && product.price <= 75;
-      }
-      return product.price > 75;
-    });
-  }
-  if (filters.searchQuery) {
-    filteredProducts = products.filter((product) => product.name.toLowerCase().includes(filters.searchQuery.toLowerCase()));
-  }
-  return filteredProducts;
 }
 
 export default HomePage;
