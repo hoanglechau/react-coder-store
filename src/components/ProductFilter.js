@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box, Button, Stack, Typography,
 } from '@mui/material';
@@ -68,7 +69,7 @@ function ProductFilter({ resetFilter }) {
           type="submit"
           color="inherit"
           variant="outlined"
-          onClick={resetFilter}
+          onClick={() => resetFilter}
           startIcon={<ClearAllIcon />}
         >
           Clear All
