@@ -8,7 +8,7 @@ import ProductFilter from '../components/ProductFilter';
 import ProductSearch from '../components/ProductSearch';
 import ProductSort from '../components/ProductSort';
 import ProductList from '../components/ProductList';
-import { FormProvider } from '../components/form';
+import FormProvider from '../components/form/FormProvider';
 import apiService from '../app/apiService';
 import LoadingScreen from '../components/LoadingScreen';
 
