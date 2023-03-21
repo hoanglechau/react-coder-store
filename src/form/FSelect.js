@@ -1,3 +1,4 @@
+import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { TextField } from '@mui/material';
 
@@ -10,6 +11,7 @@ function FSelect({ name, children, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => (
         <TextField
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           {...field}
           select
           fullWidth
