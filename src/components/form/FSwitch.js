@@ -14,7 +14,6 @@ function FSwitch({ name, ...other }) {
           render={({ field }) => <Switch {...field} checked={field.value} />}
         />
               )}
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       {...other}
     />
   );
