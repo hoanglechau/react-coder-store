@@ -1,4 +1,6 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, {
+  createContext, useReducer, useEffect, useMemo,
+} from 'react';
 
 const initialState = {
   isAuthenticated: false,
@@ -88,13 +90,11 @@ function AuthProvider({ children }) {
     callback();
   };
 
+  const value = useMemo(() => ({ ...state, login, logout }), [state]);
+
   return (
     <AuthContext.Provider
-      value={{
-        ...state,
-        login,
-        logout,
-      }}
+      value={value}
     >
       {children}
     </AuthContext.Provider>
