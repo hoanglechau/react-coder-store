@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   Grid,
@@ -33,9 +33,9 @@ function DetailPage() {
           const res = await apiService.get(`/products/${params.id}`);
           setProduct(res.data);
           setError('');
-        } catch (error) {
-          console.log(error);
-          setError(error.message);
+        } catch (err) {
+          console.log(err);
+          setError(err.message);
         }
         setLoading(false);
       };
@@ -55,6 +55,7 @@ function DetailPage() {
         {loading ? (
           <LoadingScreen />
         ) : (
+          // eslint-disable-next-line react/jsx-no-useless-fragment
           <>
             {error ? (
               <Alert severity="error">{error}</Alert>
@@ -93,9 +94,9 @@ function DetailPage() {
                           display: 'block',
                           textTransform: 'uppercase',
                           color:
-                                                            product.status === 'sale'
-                                                              ? 'error.main'
-                                                              : 'info.main',
+                            product.status === 'sale'
+                              ? 'error.main'
+                              : 'info.main',
                         }}
                       >
                         {product.status}
@@ -141,8 +142,9 @@ function DetailPage() {
                       <Box>
                         <ReactMarkdown
                           rehypePlugins={[rehypeRaw]}
-                          children={product.description}
-                        />
+                        >
+                          {product.description}
+                        </ReactMarkdown>
                       </Box>
                     </Grid>
                   </Grid>
